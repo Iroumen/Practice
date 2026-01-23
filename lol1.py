@@ -1,2 +1,2 @@
-l=int(input())
+gitcoml=int(input())
 print(l+2)
