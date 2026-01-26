@@ -1,2 +1,5 @@
-gitcoml=int(input())
-print(l+2)
+a=input()
+if(a.isdigit()):
+    print("int")
+else: 
+    print("str")
