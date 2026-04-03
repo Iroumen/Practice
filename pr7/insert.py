@@ -1,25 +1,27 @@
-import psycopg2           
-from config import load_config  
-  
+import psycopg2
+from config import load_config
 
-def insert_vendor(vendor_name):
-    """Insert a new vendor and return its ID."""
-    sql = """INSERT INTO vendors(vendor_name) VALUES (%s) RETURNING vendor_id;"""
-    vendor_id = None
-    config = load_config()
+def insert_from_console():
+    print("Starting insert function")  # ✅ debug
+    first_name = input("Enter first name: ")
+    last_name = input("Enter last name: ")
+    phone = input("Enter phone: ")
+
+    print("Inputs received:", first_name, last_name, phone)  # ✅ debug
+
+    sql = "INSERT INTO phonebook (first_name, last_name, phone) VALUES (%s, %s, %s)"
     
     try:
+        config = load_config()
+        print("Config loaded:", config)  # ✅ debug
         with psycopg2.connect(**config) as conn:
+            print("Connected to DB")  # ✅ debug
             with conn.cursor() as cur:
-                cur.execute(sql, (vendor_name,))
-                row = cur.fetchone()
-                if row:
-                    vendor_id = row[0]
-                conn.commit()
-    except (Exception, psycopg2.DatabaseError) as error:
-        print(error)
-        return vendor_id
-    
+                cur.execute(sql, (first_name, last_name, phone))
+            conn.commit()
+        print("Contact added successfully.")
+    except Exception as e:
+        print("Error:", e)
 
-if __name__ == '__main__':
-    insert_vendor("3M Co.")
+if __name__ == "__main__":
+    insert_from_console()
